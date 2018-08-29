@@ -4,7 +4,6 @@
 
 <body>
 <?php
-
 include_once 'Grid.php';
 $data = [
         [
@@ -36,22 +35,5 @@ $grid = new Grid(3,3);
 $grid->parse($data);
 $grid->render();
 ?>
-<style type="text/css"  >
-    .grid{
-        border: 2px solid black;
-        width: 300px;
-        height: 300px;
-    }
-    .row{
-        background: #0000cc;
-        width: 100%;
-    }
-    .cell{
-        background: #00AB85;
-        width: 100px;
-        height: 100px;
-        float: left;
-    }
-</style>
 </body>
 </html>

@@ -1,7 +1,11 @@
 <?php
-require_once 'Element.php';
 
+namespace Src\Elements;
 
+/**
+ * Class Rectangle
+ * @package Src\Elements
+ */
 class Rectangle extends Element implements Renderable
 {
     /**
@@ -29,10 +33,15 @@ class Rectangle extends Element implements Renderable
      */
     private $content = [];
 
+    /**
+     * Rectangle constructor.
+     * @param array $data
+     * @throws \Exception
+     */
     public function __construct(array $data)
     {
-        if (!$data['cells']){
-            throw new Exception('missing required parameter cells');
+        if (!$data['cells']) {
+            throw new \Exception('missing required parameter cells');
         }
         parent::__construct('div');
         $textNode = $this->getTextElement($data['text']);
@@ -48,83 +57,84 @@ class Rectangle extends Element implements Renderable
     /**
      * Function return a rectangle html.
      */
-    public function render(): void
+    public function render(): string
     {
+        $result = '';
         $style = $this->renderStyle();
-     echo "<div class=\"$this->class\" style=\"$style\">";
-        foreach ($this->content as $item){
-            $item->render();
+        $result .= "<div class=\"$this->class\" style=\"$style\">";
+        foreach ($this->content as $item) {
+            $result .= $item->render();
         }
-     echo "</div>";
+
+        $result .= "</div>";
+
+        return $result;
     }
 
     /**
      * Generate styles for rectangle.
      * @param array $data
      */
-    private function generateStyles(array $data) : void
+    private function generateStyles(array $data): void
     {
         $this->setStyle('position', 'absolute');
         $this->setStyle('display', 'table');
-        foreach ($data as $item => $value){
+        foreach ($data as $item => $value) {
             $this->setStyle($item, $value);
         }
     }
 
     /**
-     * Function create new style which defined size of rectangle.
      * @param array $size
+     * @return Rectangle
      */
-    public function setSize(array $size) : void
+    public function setSize(array $size): self
     {
-        foreach ($size as $item => $value){
-            $this->setStyle($item , $value * 100 , 'div');
+        foreach ($size as $item => $value) {
+            $this->setStyle($item, $value * 100, 'div');
         }
+
+        return $this;
     }
 
     /**
-     * Array with cells for rectangle.
-     * @return array
+     * @return array|null
      */
-    public function getCells()
+    public function getCells(): ?array
     {
         return $this->cells;
     }
 
     /**
-     * Get new element with defined text and class name
      * @param string $text
      * @return Renderable
      */
-    private function getTextElement(string $text) : Renderable
+    private function getTextElement(string $text): Renderable
     {
-        $element = new Element('div');
-        $element->setClass('text');
-        $element->setText($text);
-        return $element;
+        return (new Element('div'))
+            ->setClass('text')
+            ->setText($text);
     }
 
     /**
-     * Method create array which will occupy by rectangle.
      * @param string $cells
      * @return array
      */
-    private function getCellsNumber(string $cells) : array
+    private function getCellsNumber(string $cells): array
     {
-        return  explode(',', $cells);
+        return explode(',', $cells);
     }
 
     /**
-     * Set spatial style for element to correct show text.
      * @param Renderable $element
      * @param array $data
      * @return Renderable
      */
-    private function setStyleForElement(Renderable $element, array $data) : Renderable
+    private function setStyleForElement(Renderable $element, array $data): Renderable
     {
-        $element->setStyle('display', 'table-cell');
-        $element->setStyle('vertical-align', $data['vertical-align']);
-        return $element;
+        return $element
+            ->setStyle('display', 'table-cell')
+            ->setStyle('vertical-align', $data['vertical-align']);
     }
 
     /**
@@ -132,7 +142,7 @@ class Rectangle extends Element implements Renderable
      * @param array $data
      * @return int
      */
-    private function getPositionForRectangle(array $data) : int
+    private function getPositionForRectangle(array $data): int
     {
         return min($data);
     }

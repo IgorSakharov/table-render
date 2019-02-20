@@ -1,7 +1,11 @@
 <?php
 
-require_once 'Renderable.php';
+namespace Src\Elements;
 
+/**
+ * Class Element
+ * @package Src\Elements
+ */
 class Element implements Renderable
 {
     /**
@@ -34,6 +38,10 @@ class Element implements Renderable
      */
     protected $text = '';
 
+    /**
+     * Element constructor.
+     * @param string $name
+     */
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -42,66 +50,77 @@ class Element implements Renderable
     /**
      * Renders div content wrapped with opening and closing tags.
      */
-    public function render(): void
+    public function render(): string
     {
+        $result = '';
         $styles = $this->renderStyle();
-        echo "<$this->name class=\"$this->class\" style=\"$styles\">";
+        $result .= "<$this->name class=\"$this->class\" style=\"$styles\">";
 
         foreach ($this->content as $item) {
-            $item->render();
+            $result .= $item->render();
         }
-        echo $this->text;
+        $result .= $this->text;
 
-        echo "</$this->name>";
+        $result .= "</$this->name>";
+
+        return $result;
     }
 
     /**
-     * Set class name for element.
      * @param string $className
+     * @return Element
      */
-    public function setClass(string $className)
+    public function setClass(string $className): self
     {
         $this->class = $className;
+
+        return $this;
     }
 
     /**
-     * Convert style for element to string from $this->styles.
      * @return string
      */
-    protected function renderStyle()
+    protected function renderStyle(): string
     {
         $styles = '';
         foreach ($this->styles as $style=>$value){
             $styles .= " $style: $value; ";
         }
+
         return $styles;
     }
 
     /**
-     * Adds renderable element to the current one.
      * @param Renderable $element
+     * @return Element
      */
-    public function add(Renderable $element)
+    public function add(Renderable $element): self
     {
         array_push($this->content, $element);
+
+        return $this;
     }
 
     /**
-     * Set text which be input inside element.
      * @param string $text
+     * @return $this
      */
-    public function setText(string $text)
+    public function setText(string $text): self
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
-     * Add style to element.
      * @param string $property
      * @param string $value
+     * @return Element
      */
     public function setStyle(string $property, string $value)
     {
         $this->styles[$property] = $value;
+
+        return $this;
     }
 }

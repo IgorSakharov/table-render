@@ -1,21 +1,24 @@
 <?php
-require_once 'Rectangle.php';
-require_once 'Renderable.php';
-require_once 'Element.php';
 
+namespace Src\Elements;
+
+/**
+ * Class Grid
+ * @package Src\Elements
+ */
 class Grid implements Renderable
 {
     /**
      * Width of grid element.
      * @var int
      */
-    private $width = 1;
+    private $width;
 
     /**
      * Height of grid element.
      * @var int
      */
-    private $height = 1;
+    private $height;
 
     /**
      * Grid element.
@@ -29,7 +32,12 @@ class Grid implements Renderable
      */
     private $cells = [1];
 
-    public function __construct(int $width, int $height)
+    /**
+     * Grid constructor.
+     * @param int $width
+     * @param int $height
+     */
+    public function __construct(int $width = 3, int $height = 3)
     {
         $this->width = $width;
         $this->height = $height;
@@ -45,8 +53,8 @@ class Grid implements Renderable
     }
 
     /**
-     * Method to parse array with rectangle data.
      * @param array $config
+     * @throws \Exception
      */
     public function parse(array $config)
     {
@@ -58,29 +66,63 @@ class Grid implements Renderable
     /**
      * Render html of grid.
      */
-    public function render(): void
+    public function render(): string
     {
-        $this->grid->render();
+       return $this->grid->render();
     }
 
     /**
-     * Add new element by config.
      * @param array $data
+     * @return Grid
+     * @throws \Exception
      */
-    private function addRectangle(array $data)
+    private function addRectangle(array $data): self
     {
-        try{
-        $rectangle = new Rectangle($data);
-        } catch (Exception $e){
-            echo $e->getMessage();
-            var_dump($data);
-            return;
-        }
-        $rectangle->setSize($this->calculateShape($rectangle));
-
-        $rectangle->add($this->getDiv());
+        ($rectangle = new Rectangle($data))
+                ->setSize($this->calculateShape($rectangle))
+                ->add($this->getDiv());
 
         $this->cells[$rectangle->position]->add($rectangle);
+
+        return $this;
+    }
+
+    /**
+     * @param int $value
+     * @return Grid
+     */
+    public function setWidth(int $value): self
+    {
+        $this->width = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param int $value
+     * @return Grid
+     */
+    public function setHeight(int $value): self
+    {
+        $this->height = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHeight(): ?int
+    {
+        return $this->height;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWidth(): ?int
+    {
+        return $this->width;
     }
 
     /**
@@ -155,9 +197,8 @@ class Grid implements Renderable
     }
 
     /**
-     * Generating style for grid element.
-     * @param Renderable $element
-     * @return Renderable
+     * @param \Src\Elements\Renderable $element
+     * @return \Src\Elements\Renderable
      */
     private function generateStyle(Renderable $element)
     {

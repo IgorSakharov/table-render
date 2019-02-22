@@ -1,0 +1,8 @@
+{% block simple_input %}
+
+{% foreach row in rows %}
+<h2>{{ row['name'] }}</h2>
+{% endforeach %}
+
+    <input type="text" value="{{ row }}"/>
+{% endblock %}

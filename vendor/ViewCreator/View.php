@@ -2,7 +2,10 @@
 
 namespace Vendor\ViewCreator;
 
-use Src\Kernel;
+use Vendor\ViewCreator\Functions\ForeachFunction;
+use Vendor\ViewCreator\Functions\IncludeBlockFunction;
+use Vendor\ViewCreator\Functions\IncludeFunction;
+use Vendor\ViewCreator\VariableReplaceTrait;
 
 /**
  * Class View
@@ -10,6 +13,23 @@ use Src\Kernel;
  */
 class View
 {
+    use VariableReplaceTrait;
+
+    /**
+     * @var array
+     */
+    protected $parameters;
+
+    /**
+     * @var array
+     */
+    protected $includes = [];
+
+    /**
+     * @var array
+     */
+    protected $blocks = [];
+
     /**
      * @param string $fileName
      * @param array $parameters
@@ -17,26 +37,61 @@ class View
      */
     public function render(string $fileName, array $parameters = null): string
     {
-        $fileContent = file_get_contents(Kernel::PROJECT_DIR . '/Src/View/' . $fileName);
+        $this->parameters = $parameters;
 
-        return $this->setVariableValue($fileContent, $parameters);
+        $fileContent = $this->getFileContent($fileName);
+
+        $fileContent = $this->includes($fileContent);
+
+        $fileContent = $this->handelForeach($fileContent);
+
+        $fileContent = $this->removePatterns($fileContent, 'include');
+
+        $fileContent = $this->setVariableValue($fileContent, $this->parameters);
+
+        return $fileContent;
+
     }
 
     /**
      * @param string $fileContent
-     * @param array $parameters
-     * @return string
+     * @return string|null
      */
-    protected function setVariableValue(string $fileContent, array $parameters = null): string
+    protected function includes(string $fileContent): ?string
     {
-        if (!$parameters) {
-            return $fileContent;
-        }
+        if (preg_match_all('/({% include .*? %})/ms', $fileContent, $elements)) {
 
-        foreach ($parameters as $name => $value) {
-            $fileContent = str_replace('{{ ' . $name . ' }}', $value, $fileContent);
+            foreach ($elements[0] as $element) {
+                $include = new IncludeFunction($element, $this->parameters);
+                foreach ($include->getFileBlocks() as $blockName => $blockContent) {
+                    $this->blocks[$blockName] = $blockContent;
+                }
+            }
+
+            return (new IncludeBlockFunction($fileContent, $this->blocks))->replace();
         }
 
         return $fileContent;
+    }
+
+    /**
+     * @param string $fileContent
+     * @return string
+     */
+    protected function handelForeach(string $fileContent): string
+    {
+        $result = '';
+
+        foreach ($this->getAllFunctionsByName($fileContent, 'foreach') as $item) {
+            $foreach = new ForeachFunction(
+                $fileContent,
+                $item,
+                $this->parameters
+            );
+
+            $result .= $foreach->replace();
+        }
+
+        return $result;
     }
 }

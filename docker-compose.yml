@@ -43,4 +43,4 @@ services:
         restart: on-failure
         container_name: tr-php
         volumes:
-            - './:/usr/src/app:cached'
+            - './:/usr/src/app'

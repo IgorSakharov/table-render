@@ -41,8 +41,15 @@ class IndexController
     public function index(Request $request)
     {
         return new Response(
-            $this->view->render('index.html', [
-                'hello' => 'test'
+            $this->view->render('inputs/base.html', [
+                'title' => 'First Page',
+                'hello' => 'test',
+                'name'  => 'my name is Igor Sakharov',
+                'row'   => 'test',
+                'names'  => [
+                    ['name' => 'namert'],
+                    ['name' => 'nametest']
+                ]
             ])
         );
     }

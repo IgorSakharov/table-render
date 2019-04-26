@@ -5,7 +5,7 @@ namespace Vendor\Response;
 interface ResponseInterface
 {
     /**
-     * Sent response to client
+     * @return string
      */
-    public function send(): void;
+    public function send(): string;
 }

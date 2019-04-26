@@ -191,20 +191,21 @@ class Grid implements Renderable
      * Get new element with tag name div.
      * @return Element
      */
-    private function getDiv()
+    private function getDiv(): Element
     {
         return new Element('div');
     }
 
     /**
-     * @param \Src\Elements\Renderable $element
-     * @return \Src\Elements\Renderable
+     * @param Renderable $element
+     * @return Element
      */
-    private function generateStyle(Renderable $element)
+    private function generateStyle(Renderable $element): Element
     {
         $element->setStyle('width', $this->width * 100 .'px');
         $element->setStyle('height', $this->height * 100 .'px');
         $element->setStyle('border', '2px solid black');
+
         return $element;
     }
 }

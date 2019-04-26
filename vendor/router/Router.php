@@ -44,6 +44,19 @@ class Router
     }
 
     /**
+     * @return string
+     */
+    public function getControllerClass(): string
+    {
+        return $this->searchByRoute()['controller'];
+    }
+
+    public function getControllerMethod(): string
+    {
+        return $this->searchByRoute()['method'];
+    }
+
+    /**
      * @return array|null
      */
     private function searchByRoute(): ?array

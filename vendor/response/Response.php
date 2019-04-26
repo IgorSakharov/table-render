@@ -49,9 +49,15 @@ class Response implements ResponseInterface
     /**
      * Send response to client
      */
-    public function send(): void
+    public function send(): string
     {
-        echo $this->content;
+        if ($this->headers) {
+            foreach ($this->headers as $key => $header) {
+                header($header[0] . ': ' . $header[1]);
+            }
+        }
+
+        return $this->content;
     }
 
     /**

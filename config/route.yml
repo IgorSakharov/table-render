@@ -2,7 +2,3 @@ index_page:
   pattern: /
   controller: Src\Controllers\IndexController
   method: index
-handel_form:
-  pattern: /handel-form
-  controller: Src\Controllers\IndexController
-  method: handelForm

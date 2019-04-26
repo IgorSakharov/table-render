@@ -1,0 +1,4 @@
+RenderService:
+  class: Vendor\ViewCreator\View
+tableRendler:
+  class: Src\Services\TableRenderService

@@ -1,24 +1,18 @@
 <?php
 namespace Src\Controllers;
 
-use Src\Forms\TableForm;
 use Src\Services\TableRenderService;
-use Vendor\Form\BaseForm;
 use Vendor\Request\Request;
 use Vendor\Response\Response;
 use Vendor\ViewCreator\View;
 
 /**
  * Class IndexController
+ *
  * @package Src\Controllers
  */
 class IndexController
 {
-    /**
-     * @var TableRenderService
-     */
-    protected $tableRender;
-
     /**
      * @var View
      */
@@ -26,42 +20,28 @@ class IndexController
 
     /**
      * IndexController constructor.
+     *
+     * @param View $view
      */
-    public function __construct()
+    public function __construct(View $view)
     {
-        $this->view        = new View();
-        $this->tableRender = new TableRenderService();
+        $this->view = $view;
     }
 
     /**
-     * @param Request $request
+     * @param Request            $request
+     * @param TableRenderService $tableRenderService
+     *
      * @return Response
      * @throws \Exception
      */
-    public function index(Request $request)
+    public function index(Request $request, TableRenderService $tableRenderService)
     {
         return new Response(
-            $this->view->render('inputs/base.html', [
-                'title' => 'First Page',
-                'hello' => 'test',
-                'name'  => 'my name is Igor Sakharov',
-                'row'   => 'test',
-                'names'  => [
-                    ['name' => 'namert'],
-                    ['name' => 'nametest']
-                ]
+            $this->view->render('base.html', [
+                'table' => $tableRenderService->createNewTable(),
+                'title' => 'TITLE FOR THIS PAGE'
             ])
         );
-    }
-
-    /**
-     * @param Request $request
-     * @throws \Exception
-     */
-    public function handelForm(Request $request)
-    {
-        $form = new BaseForm($request, new TableForm());
-        var_dump($form->getDataByName('text'));
-        die;
     }
 }

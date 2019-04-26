@@ -91,7 +91,7 @@ class Rectangle extends Element implements Renderable
     public function setSize(array $size): self
     {
         foreach ($size as $item => $value) {
-            $this->setStyle($item, $value * 100, 'div');
+            $this->setStyle($item, $value * 100 . 'px', 'div');
         }
 
         return $this;

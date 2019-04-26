@@ -22,7 +22,7 @@ services:
             PMA_USER: root
             PMA_PASSWORD: root
         ports:
-            - '8080:80'
+            - '9898:80'
 
     nginx:
         image: nginx:1.15.3-alpine

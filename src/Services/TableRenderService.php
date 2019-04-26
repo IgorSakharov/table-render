@@ -3,7 +3,6 @@
 namespace Src\Services;
 
 use Src\Elements\Grid;
-use Vendor\Request\Request;
 
 /**
  * Class TableRenderService
@@ -28,24 +27,24 @@ class TableRenderService extends BaseService
                 'cells' => '1,2,4,5',
                 'text-align' => 'center',
                 'vertical-align' => 'middle',
-                'color' => 'FF0000',
-                'background-color' => '0000FF'
+                'color' => 'red',
+                'background-color' => 'blue'
             ],
             [
                 'text' => 'Текст зеленого цвета',
                 'cells' => '8,9',
                 'text-align' => 'right',
                 'vertical-align' => 'bottom',
-                'color' => '00FF00',
-                'background-color' => 'FFFFFF'
+                'color' => 'green',
+                'background-color' => 'yellow'
             ],
             [
                 'text' => 'Текст зеленого цвета',
                 'cells' => '3,6',
                 'text-align' => 'center',
                 'vertical-align' => 'middle',
-                'color' => '00FF00',
-                'background-color' => 'black'
+                'color' => 'yellow',
+                'background-color' => 'white'
             ]
         ];
 

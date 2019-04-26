@@ -2,8 +2,10 @@
 
 namespace Src;
 
+use Vendor\Controller\ControllerFactory;
 use Vendor\Router\Router;
 use Vendor\Request\Request;
+use Vendor\ServiceLoader\ServiceLoader;
 
 /**
  * Class Kernel
@@ -24,6 +26,11 @@ class Kernel
     private $request;
 
     /**
+     * @var ServiceLoader
+     */
+    private $serviceLoader;
+
+    /**
      * Kernel constructor.
      */
     public function __construct()
@@ -36,7 +43,8 @@ class Kernel
      */
     public function handel()
     {
-        $this->router = new Router($this->request);
+        $this->router        = new Router($this->request);
+        $this->serviceLoader = new ServiceLoader($this->request);
     }
 
     /**
@@ -44,6 +52,10 @@ class Kernel
      */
     public function send()
     {
-        echo $this->router->callController();
+        echo (new ControllerFactory($this->serviceLoader))
+                ->callControllerMethod(
+                    $this->router->getControllerClass(),
+                    $this->router->getControllerMethod()
+            )->send();
     }
 }

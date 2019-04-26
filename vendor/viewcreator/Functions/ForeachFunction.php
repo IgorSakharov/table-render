@@ -49,7 +49,7 @@ class ForeachFunction
      */
     public function replace(): string
     {
-        return $this->replaceString($this->fileContent, $this->handelFunction(), $this->foreachConditions, '{% endforeach %}');
+        return $this->replaceStringBetween($this->fileContent, $this->foreachConditions, '{% endforeach %}', $this->handelFunction());
     }
 
     /**

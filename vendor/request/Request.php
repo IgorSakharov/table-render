@@ -20,7 +20,7 @@ class Request implements RequestInterface
     /**
      * Request constructor.
      */
-    private function __construct()
+    public function __construct()
     {
         $this->data   = $_REQUEST;
         $this->server = $_SERVER;
